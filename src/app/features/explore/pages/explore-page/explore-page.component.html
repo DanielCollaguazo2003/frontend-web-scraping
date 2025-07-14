@@ -3,8 +3,9 @@
 
 
   <div class="mt-6">
-    <app-location-summary></app-location-summary>
+    <app-location-summary [location]="selectedLocation"></app-location-summary>
   </div>
+
 
   <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
     <app-events-panel></app-events-panel>
