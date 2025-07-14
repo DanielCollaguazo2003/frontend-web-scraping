@@ -1,0 +1,26 @@
+<div class="min-h-screen bg-gray-50 text-gray-800 px-4 py-6">
+  <app-search-bar (search)="handleSearch($event)"></app-search-bar>
+
+
+  <div class="mt-6">
+    <app-location-summary></app-location-summary>
+  </div>
+
+  <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <app-events-panel></app-events-panel>
+    <app-alerts-panel></app-alerts-panel>
+    <app-prices-panel></app-prices-panel>
+    <app-food-panel></app-food-panel>
+    <app-safety-panel></app-safety-panel>
+    <app-health-panel></app-health-panel>
+  </div>
+
+  <div class="mt-10">
+    <h2 class="text-xl font-semibold mb-2">Opiniones destacadas</h2>
+    <app-reviews-panel></app-reviews-panel>
+  </div>
+
+  <div class="mt-10">
+    <app-map-view></app-map-view>
+  </div>
+</div>
