@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./explore-page.component.scss']
 })
 export class ExplorePageComponent {
-  selectedLocation: string = 'Hola ';
+  selectedLocation: string = 'Cuenca';
 
   handleSearch(query: string) {
     this.selectedLocation = query;
