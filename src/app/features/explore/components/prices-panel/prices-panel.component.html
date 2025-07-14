@@ -1,1 +1,28 @@
-<p>prices-panel works!</p>
+<div class="bg-white rounded-xl shadow-md border border-gray-200 p-4">
+  <h3 class="text-lg font-semibold text-teal-700 mb-4 flex items-center gap-2">
+    <span class="text-xl">💸</span> Precios promedio
+  </h3>
+
+  <div *ngIf="prices; else noPrices" class="space-y-3">
+    <div class="flex justify-between text-sm text-gray-700">
+      <span>🍽️ Comida:</span>
+      <span>{{ prices.food }}</span>
+    </div>
+    <div class="flex justify-between text-sm text-gray-700">
+      <span>🏨 Hospedaje:</span>
+      <span>{{ prices.accommodation }}</span>
+    </div>
+    <div class="flex justify-between text-sm text-gray-700">
+      <span>🚕 Transporte:</span>
+      <span>{{ prices.transport }}</span>
+    </div>
+    <div class="flex justify-between text-sm text-gray-700">
+      <span>🎟️ Actividades:</span>
+      <span>{{ prices.activities }}</span>
+    </div>
+  </div>
+
+  <ng-template #noPrices>
+    <p class="text-sm text-gray-500 italic">No se encontraron datos de precios para este destino.</p>
+  </ng-template>
+</div>
