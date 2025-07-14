@@ -1,1 +1,28 @@
-<p>health-panel works!</p>
+<div class="bg-white rounded-xl shadow-md border border-gray-200 p-4">
+  <h3 class="text-lg font-semibold text-teal-700 mb-4 flex items-center gap-2">
+    <span class="text-xl">🏥</span> Salud y sanidad
+  </h3>
+
+  <div *ngIf="info.length > 0; else noInfo" class="space-y-4">
+    <div
+      *ngFor="let item of info"
+      class="border-l-4 p-3 rounded-md bg-gray-50"
+      [ngClass]="{
+        'border-red-500': item.level === 'Alta',
+        'border-yellow-500': item.level === 'Media',
+        'border-green-500': item.level === 'Baja'
+      }"
+    >
+      <h4 class="font-semibold text-sm">
+        {{ item.icon }} {{ item.title }}
+      </h4>
+      <p class="text-xs text-gray-600">
+        📅 {{ item.date }} — {{ item.note }}
+      </p>
+    </div>
+  </div>
+
+  <ng-template #noInfo>
+    <p class="text-sm text-gray-500 italic">No hay información sanitaria destacada para este destino.</p>
+  </ng-template>
+</div>
