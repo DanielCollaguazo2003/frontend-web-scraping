@@ -6,6 +6,7 @@ interface HealthInfoItem {
   note: string;
   level: 'Alta' | 'Media' | 'Baja';
   icon: string;
+  report: string;
 }
 
 @Component({
@@ -13,47 +14,42 @@ interface HealthInfoItem {
   templateUrl: './health-panel.component.html'
 })
 export class HealthPanelComponent implements OnChanges {
-  @Input() location: string = '';
+  @Input() location: string = ''; // opcional si aún quieres usarla visualmente
+  @Input() healthData: { items: HealthInfoItem[] } | null = null;
+
   info: HealthInfoItem[] = [];
+  showBackStates: boolean[] = [];
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['location'] && this.location) {
-      this.loadMockHealthInfo(this.location);
+    if (changes['healthData']) {
+      this.loadFromData();
     }
   }
 
-  private loadMockHealthInfo(location: string) {
-    const lower = location.toLowerCase();
+  toggleCard(index: number): void {
+    this.showBackStates[index] = !this.showBackStates[index];
+  }
 
-    if (lower.includes('quito')) {
-      this.info = [
-        {
-          title: 'Recomendación de vacuna contra fiebre amarilla',
-          date: 'Julio 2025',
-          note: 'Especialmente para zonas rurales y selva.',
-          level: 'Media',
-          icon: '💉'
-        },
-        {
-          title: 'Buen acceso a atención médica',
-          date: 'Actualizado julio 2025',
-          note: 'Hospitales y clínicas accesibles en zonas urbanas.',
-          level: 'Baja',
-          icon: '🏥'
-        }
-      ];
-    } else if (lower.includes('cuenca')) {
-      this.info = [
-        {
-          title: 'Brote leve de dengue reportado',
-          date: 'Julio 2025',
-          note: 'Recomendado uso de repelente en zonas húmedas.',
-          level: 'Alta',
-          icon: '🦟'
-        }
-      ];
-    } else {
-      this.info = [];
+  handleKeyDown(event: KeyboardEvent, index: number): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.toggleCard(index);
     }
+  }
+
+  getBorderColor(level: 'Alta' | 'Media' | 'Baja'): string {
+    return {
+      'Alta': 'border-red-500',
+      'Media': 'border-yellow-500',
+      'Baja': 'border-green-500'
+    }[level];
+  }
+
+  private loadFromData() {
+    this.info = Array.isArray(this.healthData?.items)
+      ? this.healthData!.items
+      : [];
+
+    this.showBackStates = this.info.map(() => false);
   }
 }

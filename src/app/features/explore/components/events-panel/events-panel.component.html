@@ -5,12 +5,52 @@
 
   <div *ngIf="events.length > 0; else noEvents" class="space-y-4">
     <div
-      *ngFor="let event of events"
-      class="border border-gray-100 rounded-lg p-3 bg-gray-50 hover:bg-gray-100 transition"
+      *ngFor="let event of events; let i = index"
+      class="relative w-full h-32 cursor-pointer"
+      style="perspective: 1000px;"
     >
-      <h4 class="text-md font-bold">{{ event.name }}</h4>
-      <p class="text-sm text-gray-600">📅 {{ event.date }} — 📍 {{ event.location }}</p>
-      <p class="text-sm text-gray-700 mt-1">{{ event.description }}</p>
+      <div
+        class="relative w-full h-full transition-transform duration-500"
+        [style.transform]="showBackStates[i] ? 'rotateY(180deg)' : 'rotateY(0deg)'"
+        style="transform-style: preserve-3d;"
+        (click)="toggleCard(i)"
+        (keydown)="handleKeyDown($event, i)"
+        tabindex="0"
+        role="button"
+        [attr.aria-expanded]="showBackStates[i]"
+      >
+        <!-- FRENTE -->
+        <div
+          class="absolute w-full h-full bg-gray-50 border-l-4 p-3 rounded-md"
+          style="backface-visibility: hidden;"
+          [ngClass]="['border-teal-500']"
+        >
+          <h4 class="font-semibold text-lg mb-2">{{ event.name }}</h4>
+          <p class="text-xs text-gray-600 flex items-center gap-1 mb-1">
+            <i class="fas fa-calendar text-gray-400"></i> {{ event.date }}
+          </p>
+          <p class="text-xs text-gray-600 flex items-center gap-1">
+            <i class="fas fa-map-marker-alt text-gray-400"></i> {{ event.location }}
+          </p>
+          <div class="mt-auto text-xs text-gray-400 italic">Click para detalles</div>
+        </div>
+
+        <!-- REVERSO -->
+        <div
+          class="absolute w-full h-full bg-gray-100 border border-gray-300 rounded-md p-3"
+          style="backface-visibility: hidden; transform: rotateY(180deg);"
+        >
+          <h4 class="font-semibold text-teal-700 text-sm mb-2">Descripción del evento</h4>
+          <div class="text-xs text-gray-700 overflow-y-auto max-h-20 whitespace-pre-line font-sans">
+            {{ event.description }}
+          </div>
+          <h4 class="font-semibold text-teal-400 text-sm mb-2">Reporte</h4>
+          <div class="text-xs text-gray-700 overflow-y-auto max-h-20 whitespace-pre-line font-sans">
+            {{ generalReport }}
+          </div>
+          <div class="mt-2 text-right text-xs text-teal-500 italic">Click para volver</div>
+        </div>
+      </div>
     </div>
   </div>
 

@@ -1,60 +1,56 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+
 interface SafetyIncident {
   title: string;
   date: string;
   location: string;
   level: 'Alto' | 'Medio' | 'Bajo';
   icon: string;
+  report: string;
 }
+
 @Component({
   selector: 'app-safety-panel',
   templateUrl: './safety-panel.component.html',
   styleUrls: ['./safety-panel.component.scss']
 })
 export class SafetyPanelComponent implements OnChanges {
+  @Input() location: string = ''; // opcional para mostrar nombre de ciudad
+  @Input() safetyData: { items: SafetyIncident[] } | null = null;
 
-   @Input() location: string = '';
   incidents: SafetyIncident[] = [];
+  showBackStates: boolean[] = [];
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['location'] && this.location) {
-      this.loadMockIncidents(this.location);
+    if (changes['safetyData']) {
+      this.loadFromData();
     }
   }
 
-  private loadMockIncidents(location: string) {
-    const lower = location.toLowerCase();
+  toggleCard(index: number): void {
+    this.showBackStates[index] = !this.showBackStates[index];
+  }
 
-    if (lower.includes('quito')) {
-      this.incidents = [
-        {
-          title: 'Robo en la zona centro',
-          date: '10 julio',
-          location: 'Plaza Grande',
-          level: 'Alto',
-          icon: '🚨'
-        },
-        {
-          title: 'Accidente de tránsito leve',
-          date: '9 julio',
-          location: 'Av. América',
-          level: 'Medio',
-          icon: '🛵'
-        }
-      ];
-    } else if (lower.includes('cuenca')) {
-      this.incidents = [
-        {
-          title: 'Asalto a turista reportado',
-          date: '8 julio',
-          location: 'Parque Calderón',
-          level: 'Medio',
-          icon: '🚨'
-        }
-      ];
-    } else {
-      this.incidents = [];
+  handleKeyDown(event: KeyboardEvent, index: number): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.toggleCard(index);
     }
   }
 
+  getBorderColor(level: 'Alto' | 'Medio' | 'Bajo'): string {
+    return {
+      'Alto': 'border-red-500',
+      'Medio': 'border-yellow-500',
+      'Bajo': 'border-green-500'
+    }[level];
+  }
+
+  private loadFromData(): void {
+    this.incidents = Array.isArray(this.safetyData?.items)
+      ? this.safetyData!.items
+      : [];
+
+    this.showBackStates = this.incidents.map(() => false);
+  }
 }

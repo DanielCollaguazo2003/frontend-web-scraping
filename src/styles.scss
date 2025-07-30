@@ -2,3 +2,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* General Flip Card Styles - puedes incluirlo como utilidades extendidas o directamente en Tailwind config */
+.flip-card {
+  @apply relative w-full h-32 cursor-pointer;
+  perspective: 1000px;
+}
+
+.flip-card-inner {
+  @apply relative w-full h-full transition-transform duration-500;
+  transform-style: preserve-3d;
+}
+
+.flip-card-front {
+  @apply absolute w-full h-full bg-gray-50 border-l-4 p-3 rounded-md;
+  backface-visibility: hidden;
+}
+
+.flip-card-back {
+  @apply absolute w-full h-full bg-gray-100 border border-gray-300 rounded-md p-3;
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+}

@@ -5,25 +5,52 @@
 
   <div *ngIf="incidents.length > 0; else noIncidents" class="space-y-4">
     <div
-      *ngFor="let incident of incidents"
-      class="border-l-4 p-3 rounded-md bg-gray-50"
-      [ngClass]="{
-        'border-red-500': incident.level === 'Alto',
-        'border-yellow-500': incident.level === 'Medio',
-        'border-green-500': incident.level === 'Bajo'
-      }"
+      *ngFor="let incident of incidents; let i = index"
+      class="relative w-full h-32 cursor-pointer"
+      style="perspective: 1000px;"
     >
-      <h4 class="font-semibold text-sm">
-        {{ incident.icon }} {{ incident.title }}
-      </h4>
-      <p class="text-xs text-gray-600">
-        📅 {{ incident.date }} — 📍 {{ incident.location }}
-      </p>
-      <p class="text-xs text-gray-700">Nivel: {{ incident.level }}</p>
+      <div
+        class="relative w-full h-full transition-transform duration-500"
+        [style.transform]="showBackStates[i] ? 'rotateY(180deg)' : 'rotateY(0deg)'"
+        style="transform-style: preserve-3d;"
+        (click)="toggleCard(i)"
+        (keydown)="handleKeyDown($event, i)"
+        tabindex="0"
+        role="button"
+        [attr.aria-expanded]="showBackStates[i]"
+      >
+        <!-- FRENTE -->
+        <div
+          class="absolute w-full h-full bg-gray-50 border-l-4 p-3 rounded-md"
+          [ngClass]="getBorderColor(incident.level)"
+          style="backface-visibility: hidden;"
+        >
+          <h4 class="font-semibold text-sm flex items-center gap-2">
+            <span class="text-lg">{{ incident.icon }}</span> {{ incident.title }}
+          </h4>
+          <p class="text-xs text-gray-600 mt-1">
+            📅 {{ incident.date }} — 📍 {{ incident.location }}
+          </p>
+          <p class="text-xs text-gray-700 mt-1">Nivel: {{ incident.level }}</p>
+          <div class="mt-auto text-xs text-gray-400 italic">Click para detalles</div>
+        </div>
+
+        <!-- REVERSO -->
+        <div
+          class="absolute w-full h-full bg-gray-100 border border-gray-300 rounded-md p-3 overflow-y-auto max-h-32"
+          style="backface-visibility: hidden; transform: rotateY(180deg);"
+        >
+          <h4 class="font-semibold text-teal-700 text-sm mb-2">Reporte del análisis LLM</h4>
+          <pre class="text-xs text-gray-700 whitespace-pre-line font-sans">{{ incident.report }}</pre>
+          <div class="mt-2 text-right text-xs text-teal-500 italic">Click para volver</div>
+        </div>
+      </div>
     </div>
   </div>
 
   <ng-template #noIncidents>
-    <p class="text-sm text-gray-500 italic">No se reportan incidentes recientes en este destino.</p>
+    <p class="text-sm text-gray-500 italic">
+      No se reportan incidentes recientes en este destino.
+    </p>
   </ng-template>
 </div>

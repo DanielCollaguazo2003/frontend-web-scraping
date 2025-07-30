@@ -12,8 +12,9 @@ import { FoodPanelComponent } from './components/food-panel/food-panel.component
 import { SafetyPanelComponent } from './components/safety-panel/safety-panel.component';
 import { HealthPanelComponent } from './components/health-panel/health-panel.component';
 import { ReviewsPanelComponent } from './components/reviews-panel/reviews-panel.component';
-import { MapViewComponent } from './components/map-view/map-view.component';
 import { FormsModule } from '@angular/forms';
+import { FlipCardComponent } from 'src/app/shared/components/flip-card/flip-card.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -28,12 +29,14 @@ import { FormsModule } from '@angular/forms';
     SafetyPanelComponent,
     HealthPanelComponent,
     ReviewsPanelComponent,
-    MapViewComponent
+    FlipCardComponent
+
   ],
   imports: [
     CommonModule,
     FormsModule,
-    ExploreRoutingModule
+    ExploreRoutingModule,
+    HttpClientModule
   ]
 })
 export class ExploreModule { }

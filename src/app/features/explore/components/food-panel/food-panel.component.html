@@ -1,1 +1,47 @@
-<p>food-panel works!</p>
+<div class="bg-white rounded-xl shadow-md border border-gray-200 p-4">
+  <h3 class="text-lg font-semibold text-teal-700 mb-4 flex items-center gap-2">
+    <span class="text-xl">🍽️</span> Gastronomía local
+  </h3>
+
+  <div
+    class="relative w-full h-40 cursor-pointer"
+    style="perspective: 1000px;"
+    tabindex="0"
+    role="button"
+    [attr.aria-expanded]="showBack"
+    (click)="toggleFlip()"
+    (keydown)="handleKeyDown($event)"
+  >
+    <div
+      class="relative w-full h-full transition-transform duration-500"
+      [style.transform]="showBack ? 'rotateY(180deg)' : 'rotateY(0deg)'"
+      style="transform-style: preserve-3d;"
+    >
+      <!-- Frente -->
+      <div
+        class="absolute w-full h-full overflow-auto"
+        style="backface-visibility: hidden;"
+      >
+        <ul *ngIf="dishes.length > 0; else noDishes" class="list-disc list-inside space-y-2 text-gray-700 text-sm">
+          <li *ngFor="let dish of dishes">
+            <strong>{{ dish.name }}</strong>: {{ dish.description }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- Reverso -->
+      <div
+        class="absolute w-full h-full bg-gray-50 p-4 rounded-md overflow-auto"
+        style="backface-visibility: hidden; transform: rotateY(180deg);"
+      >
+        <h4 class="font-semibold text-teal-700 mb-2">Reporte general de gastronomía</h4>
+        <pre class="text-xs text-gray-700 whitespace-pre-line font-sans">{{ gastronomyReport }}</pre>
+        <div class="mt-2 text-right text-xs text-teal-500 italic">Click para volver</div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noDishes>
+    <p class="text-sm text-gray-500 italic">No hay información gastronómica para este destino.</p>
+  </ng-template>
+</div>

@@ -3,14 +3,15 @@
     <span class="text-xl">💬</span> Opiniones destacadas
   </h3>
 
-  <div *ngIf="reviews.length > 0; else noReviews" class="space-y-4 max-h-80 overflow-y-auto">
-    <div *ngFor="let review of reviews" class="border-b border-gray-200 pb-3 last:border-none">
+  <div *ngIf="comentarios.length > 0; else noReviews" class="space-y-4 max-h-80 overflow-y-auto">
+    <div *ngFor="let comentario of comentarios" class="border-b border-gray-200 pb-3 last:border-none">
       <div class="flex items-center justify-between text-sm font-semibold text-gray-800">
-        <span>👤 {{ review.user }}</span>
-        <span class="text-yellow-500">{{ getStars(review.rating) }}</span>
+        <span>👤 {{ comentario.usuario }}</span>
+        <span class="text-yellow-500">{{ getStars(comentario.calificacion) }}</span>
       </div>
-      <p class="text-xs text-gray-500 mb-1">{{ review.date }}</p>
-      <p class="text-gray-700 text-sm">{{ review.comment }}</p>
+      <p class="text-xs text-gray-500 mb-1">{{ comentario.fecha }}</p>
+      <p class="text-gray-700 text-sm">{{ comentario.comentario }}</p>
+      <p class="text-xs text-gray-500 italic">{{ comentario.reporte }}</p>
     </div>
   </div>
 

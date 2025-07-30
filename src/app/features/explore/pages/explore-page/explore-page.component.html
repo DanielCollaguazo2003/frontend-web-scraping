@@ -1,27 +1,55 @@
-<div class="min-h-screen bg-gray-50 text-gray-800 px-4 py-6">
-  <app-search-bar (search)="handleSearch($event)"></app-search-bar>
+<!-- Encabezado con imagen o ícono -->
+<header class="text-center py-10 bg-gradient-to-r from-blue-100 to-pink-100 rounded-xl shadow mb-8 relative overflow-hidden">
+  <!-- Ícono flotante (puedes cambiar por una imagen real si deseas) -->
+  <div class="absolute top-4 right-4 text-6xl opacity-20">🌍</div>
 
+  <h1 class="text-5xl font-extrabold text-blue-800 tracking-wide">
+    V<span class="text-pink-600">IA</span>JERO
+  </h1>
+  <p class="text-gray-700 mt-3 text-xl max-w-2xl mx-auto">
+    Descubre, analiza y planea tu próximo destino con ayuda de la Inteligencia Artificial.
+  </p>
+  <p class="mt-2 text-sm text-gray-600 italic">"Viajar ya no es lo mismo... es más inteligente."</p>
+</header>
 
-  <div class="mt-6">
-    <app-location-summary [location]="selectedLocation"></app-location-summary>
-  </div>
-
-
-  <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-    <app-events-panel [location]="selectedLocation"></app-events-panel>
-    <app-alerts-panel [location]="selectedLocation"></app-alerts-panel>
-    <app-prices-panel [location]="selectedLocation"></app-prices-panel>
-    <app-food-panel></app-food-panel>
-    <app-safety-panel [location]="selectedLocation"></app-safety-panel>
-    <app-health-panel [location]="selectedLocation"></app-health-panel>
-  </div>
-
-  <div class="mt-10">
-    <h2 class="text-xl font-semibold mb-2">Opiniones destacadas</h2>
-    <app-reviews-panel [location]="selectedLocation"></app-reviews-panel>
-  </div>
-
-  <div class="mt-10">
-    <app-map-view></app-map-view>
+<!-- Barra de búsqueda -->
+<div class="flex justify-center">
+  <div class="max-w-4xl mx-auto px-4">
+    <app-search-bar (search)="handleSearch($event)"></app-search-bar>
   </div>
 </div>
+
+<!-- Loader animado -->
+<div *ngIf="loading" class="mt-12 flex justify-center">
+  <div class="w-full max-w-md bg-white p-6 rounded-lg shadow flex items-center gap-4 border border-blue-100">
+    <svg class="animate-spin h-6 w-6 text-blue-600" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+    </svg>
+    <span class="text-blue-700 font-semibold">Cargando datos en tiempo real... {{progress}}%</span>
+  </div>
+</div>
+
+<!-- Contenido principal -->
+<ng-container *ngIf="!loading">
+  <div class="mt-12 max-w-7xl mx-auto px-4 space-y-10">
+
+    <!-- Paneles informativos con íconos temáticos -->
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <app-events-panel [location]="selectedLocation" [eventData]="reportData?.eventos_turisticos" panelTitle="🎭 Eventos turísticos"></app-events-panel>
+      <app-alerts-panel [location]="selectedLocation" [alertData]="reportData?.alertas" panelTitle="🚨 Alertas actuales"></app-alerts-panel>
+      <app-prices-panel [location]="selectedLocation" panelTitle="💰 Precios locales"></app-prices-panel>
+      <app-food-panel [location]="selectedLocation" [gastronomyData]="reportData?.gastronomia" panelTitle="🍽️ Gastronomía local"></app-food-panel>
+      <app-safety-panel [location]="selectedLocation" [safetyData]="reportData?.seguridad" panelTitle="🛡️ Seguridad"></app-safety-panel>
+      <app-health-panel [location]="selectedLocation" [healthData]="reportData?.salud" panelTitle="🏥 Salud y sanidad"></app-health-panel>
+    </div>
+
+    <!-- Opiniones -->
+    <div>
+      <h2 class="text-2xl font-bold text-gray-800 mb-3 flex items-center gap-2">
+        🌟 Opiniones destacadas
+      </h2>
+      <app-reviews-panel [location]="selectedLocation" [reviewsData]="reportData?.opiniones"></app-reviews-panel>
+    </div>
+  </div>
+</ng-container>

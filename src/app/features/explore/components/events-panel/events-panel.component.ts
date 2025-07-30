@@ -14,44 +14,44 @@ interface EventItem {
 })
 export class EventsPanelComponent implements OnChanges {
   @Input() location: string = '';
+  @Input() eventData: any;
+
   events: EventItem[] = [];
+  generalReport: string = '';
+  showBackStates: boolean[] = [];
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['location'] && this.location) {
-      this.loadMockEvents(this.location);
+    if (changes['eventData']) {
+      this.loadEventsFromData();
     }
   }
 
-  private loadMockEvents(location: string) {
-    const lower = location.toLowerCase();
-    if (lower.includes('quito')) {
-      this.events = [
-        {
-          name: 'Fiesta de la Luz',
-          date: '12 – 16 Agosto',
-          location: 'Centro Histórico',
-          description:
-            'Festival de arte urbano con iluminación de iglesias coloniales.'
-        },
-        {
-          name: 'Feria Gastronómica Andina',
-          date: '20 – 22 Septiembre',
-          location: 'Parque Itchimbía',
-          description:
-            'Exposición de comida tradicional con chefs nacionales e internacionales.'
-        }
-      ];
-    } else if (lower.includes('cuenca')) {
-      this.events = [
-        {
-          name: 'Festival de Jazz',
-          date: '1 – 3 Noviembre',
-          location: 'Teatro Casa de la Cultura',
-          description: 'Encuentro internacional de jazz en escenarios históricos.'
-        }
-      ];
-    } else {
-      this.events = [];
+  toggleCard(index: number): void {
+    this.showBackStates[index] = !this.showBackStates[index];
+  }
+
+  handleKeyDown(event: KeyboardEvent, index: number): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.toggleCard(index);
     }
+  }
+
+  private loadEventsFromData(): void {
+    if (!this.eventData || !Array.isArray(this.eventData.eventos)) {
+      this.events = [];
+      this.generalReport = '';
+      return;
+    }
+
+    this.events = this.eventData.eventos.map((raw: any) => ({
+      name: raw.nombre || 'Evento sin nombre',
+      date: raw.fecha || 'Fecha desconocida',
+      location: raw.ubicacion || 'Ubicación no especificada',
+      description: raw.descripcion || 'Sin descripción',
+    }));
+
+    this.generalReport = this.eventData.reporte || 'Sin reporte general.';
+    this.showBackStates = this.events.map(() => false);
   }
 }
